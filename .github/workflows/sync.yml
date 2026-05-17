@@ -9,16 +9,15 @@ jobs:
     steps:
     - name: 1. Pull Image via GitHub Network
       run: |
-        # 使用微软海外 Azure 骨干网瞬间无限制拉取最新正版镜像
         docker pull ghcr.io/open-webui/open-webui:main
 
     - name: 2. Save Image to Local File
       run: |
-        # 把几百兆的镜像打包压缩成一个纯粹的离线包文件
         docker save ghcr.io/open-webui/open-webui:main -o open-webui.tar
 
-    - name: 3. Upload File to Wetransfer (No Passwords Needed)
-      run: |
-        # 利用全球免密秒传工具，将这个离线包直接上传到国内完全可连的云端加速网关
-        curl -sL https://git.io | sh
-        ./transfer wet open-webui.tar
+    - name: 3. Upload Tar to GitHub Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: open-webui-offline-package
+        path: open-webui.tar
+        retention-days: 1 # 文件保留1天，节约空间
