@@ -1,0 +1,21 @@
+name: Sync Images to Aliyun
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 1. Login to Aliyun
+      run: |
+        echo "${{ secrets.ALIYUN_REGISTRY_PASSWORD }}" | docker login --username="wwplay@gmail.com" --password-stdin ://aliyuncs.com
+
+    - name: 2. Pull Open WebUI Image
+      run: |
+        docker pull ghcr.io/open-webui/open-webui:main
+
+    - name: 3. Retag and Push to Aliyun
+      run: |
+        docker tag ghcr.io/open-webui/open-webui:main ://aliyuncs.com/my-hermes-agent/hermes:open-webui
+        docker push ://aliyuncs.com/my-hermes-agent/hermes:open-webui
