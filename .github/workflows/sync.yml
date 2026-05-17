@@ -1,4 +1,4 @@
-name: Sync Images to Aliyun
+name: Export Open WebUI Tar
 
 on:
   workflow_dispatch:
@@ -7,15 +7,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: 1. Login to Aliyun
+    - name: 1. Pull Image via GitHub Network
       run: |
-        echo "${{ secrets.ALIYUN_REGISTRY_PASSWORD }}" | docker login --username="wwplay@gmail.com" --password-stdin ://aliyuncs.com
-
-    - name: 2. Pull Open WebUI Image
-      run: |
+        # 使用微软海外 Azure 骨干网瞬间无限制拉取最新正版镜像
         docker pull ghcr.io/open-webui/open-webui:main
 
-    - name: 3. Retag and Push to Aliyun
+    - name: 2. Save Image to Local File
       run: |
-        docker tag ghcr.io/open-webui/open-webui:main ://aliyuncs.com/my-hermes-agent/hermes:open-webui
-        docker push ://aliyuncs.com/my-hermes-agent/hermes:open-webui
+        # 把几百兆的镜像打包压缩成一个纯粹的离线包文件
+        docker save ghcr.io/open-webui/open-webui:main -o open-webui.tar
+
+    - name: 3. Upload File to Wetransfer (No Passwords Needed)
+      run: |
+        # 利用全球免密秒传工具，将这个离线包直接上传到国内完全可连的云端加速网关
+        curl -sL https://git.io | sh
+        ./transfer wet open-webui.tar
