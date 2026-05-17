@@ -9,7 +9,8 @@ jobs:
     steps:
     - name: 1. Login to Aliyun
       run: |
-        echo "${{ secrets.ALIYUN_REGISTRY_PASSWORD }}" | docker login --username="wwplay@gmail.com" --password-stdin crpi-g8pfju6vtmetiw0d.cn-shanghai.personal.cr.aliyuncs.com
+        # 提示：请直接把下方【你的阿里云访问凭证密码】改成你真正的固定密码（保留双引号）
+        echo "!!Pa55word!!" | docker login --username="wwplay@gmail.com" --password-stdin crpi-g8pfju6vtmetiw0d.cn-shanghai.personal.cr.aliyuncs.com
 
     - name: 2. Pull Original Image
       run: |
