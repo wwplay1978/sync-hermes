@@ -11,14 +11,11 @@ jobs:
       run: |
         docker pull nousresearch/hermes-agent:latest
 
-    - name: 2. Login and Push with Base64 Tunnel
+    - name: 2. Login to Aliyun
       run: |
-        # 1. 动态解密你的阿里云专属固定密码 !!Pa55word!! 并完成登录
-        echo "ISEPaTVzd29yZCEh" | base64 -d | docker login --username="wwplay@gmail.com" --password-stdin crpi-g8pfju6vtmetiw0d.cn-shanghai.personal.cr.aliyuncs.com
+        echo "${{ secrets.ALIYUN_REGISTRY_PASSWORD }}" | docker login --username="wwplay@gmail.com" --password-stdin crpi-g8pfju6vtmetiw0d.cn-shanghai.personal.cr.aliyuncs.com
 
-        # 2. 动态解密你完整的阿里云长网址，完全对 GitHub 屏蔽明文
-        REAL_URL=$(echo "Y3JwaS1nOHBmanU2dnRtZXRpdzBkLmNuLXNoYW5naGFpLnBlcnNvbmFsLmNyLmFsaXl1bmNzLmNvbS9teS1oZXJtZXMtYWdlbnQvaGVybWVzOmxhdGVzdA==" | base64 -d)
-
-        # 3. 运行 Docker 打标签并推送
-        docker tag nousresearch/hermes-agent:latest "$REAL_URL"
-        docker push "$REAL_URL"
+    - name: 3. Retag and Push to Aliyun
+      run: |
+        docker tag nousresearch/hermes-agent:latest ://aliyuncs.com
+        docker push ://aliyuncs.com
